@@ -26,9 +26,14 @@ int _printf(const char *format, ...)
 		}
 		else if (format[p + 1] == 's')
 		{
-			count_str = put_ss(va_arg(list_arguments, char *));
+			const char *str = va_arg(list_arguments, const char *);
+
+			for (count_str = 0; str[count_str] != '\0'; count_str++)
+			{
+				put_car(str[count_str]);
+			}
 			p++;
-			chars_print = chars_print + (count_str - 1);
+			chars_print += count_str - 1;
 		}
 		else if (format[p + 1] == '%')
 		{
