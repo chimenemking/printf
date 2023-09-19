@@ -4,43 +4,35 @@
  * @format: format string containing conversion specifiers
  * Return: return the number of characters printed
  */
-int printf(const char *format, ...)
+int _printf(const char *format, ...)
 {
-	int chars_print = 0;
+	unsigned int p, count_str, chars_print = 0;
 	va_list list_arguments;
 
 	va_start(list_arguments, format);
-
-	while (*format)
+	for (p = 0; format[p] != '\0'; p++)
 	{
-		if (*format != '%')
+		if (format[p] != '%')
 		{
-			write(1, format, 1);
-			chars_print++;
-		} else
+			put_car(format[p]);
+		}
+		else if (format[p + 1] == 'c')
 		{
-			format++;
-			if (*format == '\0')
-			{
-				break;
-			}
-			if (*format == '%')
-			{
-				write(1, format, 1);
-				chars_print++;
-			} else if (*format == 'c')
-			{
-				char ch = va_arg(list_arguments, int);
-				write(1, &ch, 1);
-				chars_print++;
-			} else if (*format == 's')
-			{
-				char *str = va_arg(list_arguments, char*);
-				int strln = strlen(str);
-				chars_print += write(1, str, strln);
-			}
-		} format++;
+			put_car(va_arg(list_arguments, int));
+			p++;
+		}
+		else if (format[p + 1] == 's')
+		{
+			count_str = put_ss(va_arg(list_arguments, char *));
+			p++;
+			chars_print = chars_print + (count_str - 1);
+		}
+		else if (format[p + 1] == '%')
+		{
+			put_car('%');
+		}
+		chars_print++;
 	}
 	va_end(list_arguments);
-	return chars_print;
+	return (chars_print);
 }
