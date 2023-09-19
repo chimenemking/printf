@@ -9,6 +9,9 @@ int _printf(const char *format, ...)
 	unsigned int p, count_str, chars_print = 0;
 	va_list list_arguments;
 
+	if(!format || (format[0] == '%' && format[1] == '\0'))
+		return (-1);
+
 	va_start(list_arguments, format);
 	for (p = 0; format[p] != '\0'; p++)
 	{
