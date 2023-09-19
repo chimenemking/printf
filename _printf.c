@@ -1,6 +1,6 @@
 #include "main.h"
 /**
- * printf - to print output to stdout
+ * _printf - to print output to stdout
  * @format: format string containing conversion specifiers
  * Return: return the number of characters printed
  */
@@ -9,7 +9,7 @@ int _printf(const char *format, ...)
 	unsigned int p, count_str, chars_print = 0;
 	va_list list_arguments;
 
-	if(!format || (format[0] == '%' && format[1] == '\0'))
+	if (!format || (format[0] == '%' && format[1] == '\0'))
 		return (-1);
 
 	va_start(list_arguments, format);
