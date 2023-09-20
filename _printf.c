@@ -6,40 +6,43 @@
  */
 int _printf(const char *format, ...)
 {
-	unsigned int p, count_str, chars_print = 0;
+	int chars_print = 0;
 	va_list list_arguments;
 
-	if (!format || (format[0] == '%' && format[1] == '\0'))
-		return (-1);
-
 	va_start(list_arguments, format);
-	for (p = 0; format[p] != '\0'; p++)
-	{
-		if (format[p] != '%')
-		{
-			put_car(format[p]);
-		}
-		else if (format[p + 1] == 'c')
-		{
-			put_car(va_arg(list_arguments, int));
-			p++;
-		}
-		else if (format[p + 1] == 's')
-		{
-			const char *str = va_arg(list_arguments, const char *);
 
-			for (count_str = 0; str[count_str] != '\0'; count_str++)
-			{
-				put_car(str[count_str]);
-			}
-			p++;
-			chars_print += count_str - 1;
-		}
-		else if (format[p + 1] == '%')
+	while (*format)
+	{
+		if (*format != '%')
 		{
-			put_car('%');
-		}
-		chars_print++;
+			write(1, format, 1);
+			chars_print++;
+		} else
+		{
+			format++;
+			if (*format == '\0')
+			{
+				break;
+			}
+			if (*format == '%')
+			{
+				write(1, format, 1);
+				chars_print++;
+			} else if (*format == 'c')
+			{
+				char ch = va_arg(list_arguments, int);
+
+				write(1, &ch, 1);
+				chars_print++;
+			} else if (*format == 's')
+			{
+				char *str = va_arg(list_arguments, char*);
+
+				int strln = strlen(str);
+
+				chars_print += write(1, str, strln);
+			}
+		} format++;
 	}
 	va_end(list_arguments);
 	return (chars_print);
